@@ -5,7 +5,7 @@ minetest.register_on_item_eat(function(hp_change, replace_with_item, itemstack, 
    local pos = user:getpos()
    if user:get_hp() >= 20 then satiated = true end
 
-   if satiated and math.random(1, 3) == 3 then
+   if satiated and math.random(1, 15) == 1 then
        minetest.sound_play("pooping_rumble", {pos = pos, gain = 0.8})
        minetest.after(5, pooper.dopoop , pos)
    end
