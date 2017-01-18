@@ -1,9 +1,14 @@
  
 minetest.register_on_item_eat(function(hp_change, replace_with_item, itemstack, user, pointed_thing)
-
+ 
    local satiated = false
    local pos = user:getpos()
-   if user:get_hp() >= 20 then satiated = true end
+
+   if minetest.get_modpath("hunger") and hunger.players and hunger.players[name] then
+      satiated = (hunger.players[name].lvl == HUNGER_MAX)
+   else
+      if user:get_hp() >= 20 then satiated = true end
+   end
 
    if satiated and math.random(1, 15) == 1 then
        minetest.sound_play("pooping_rumble", {pos = pos, gain = 0.8})
@@ -25,15 +30,43 @@ minetest.register_node("pooping:poop", {
     drawtype = "mesh",
 	mesh = "pooping_poop.obj",
     paramtype = "light",
-    buildable_to = true,
-    on_use = minetest.item_eat(1),
+    buildable_to = true,   
 	floodable = true,
 	selection_box = po_cbox,
 	collision_box = po_cbox,
 	groups = {crumbly = 3, soil = 1, falling_node = 1}, 
 	sounds = default.node_sound_dirt_defaults(),
+    on_use = function(itemstack, user, pointed_thing)
+
+        if minetest.get_modpath("bonemeal") then 
+
+        	 -- did we point at a node?
+		    if pointed_thing.type ~= "node" then
+                return minetest.item_eat(1)(itemstack, user, pointed_thing)
+			 
+		    end
+
+		    -- is area protected?
+		    if minetest.is_protected(pointed_thing.under, user:get_player_name()) then
+			    return
+		    end
+
+		    -- take item if not in creative
+		    if not minetest.setting_getbool("creative_mode") then
+			    itemstack:take_item()
+		    end
+
+           	-- get position and call global on_use function
+		    bonemeal:on_use(pointed_thing.under)
+
+		    return itemstack
+      end
+end
 })
- 
+
+if minetest.get_modpath("hunger") then
+    hunger.register_food("pooping:poop", 1, nil, 6, nil, nil) 
+end
 
 minetest.register_abm(
 	{nodenames = {"pooping:poop"},

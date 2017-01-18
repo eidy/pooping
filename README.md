@@ -9,6 +9,9 @@ Features
 - Player eats too much (satiated) and tummy growls 
 - Poop decomposes and will grow flowers or mushrooms eventually (Thanks to Oldercoder for the idea)
 - API which when called makes a hilarious pooping sounds (the kids love it) - great for calling from mobs
+- New! Poop as a Magical Fertilizer - Giving the ability to quickly grow plants and saplings. (uses optional bonemeal mod)
+
+
 
 
 Download at https://github.com/eidy/pooping/archive/master.zip
@@ -17,7 +20,13 @@ Silly video demo here : https://www.youtube.com/watch?v=9y4Zcy4M268
 (Animal pooping was set to often as possible...not the default)
 
 
+Optional Dependencies
+hunger - For poisonous effects if poop is partaken
+bonemeal - Makes poop as powerful as bonemeal
+
+
 Api
+---
 
 pooper.dopoop(pos)
 
